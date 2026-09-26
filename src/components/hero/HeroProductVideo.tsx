@@ -244,26 +244,40 @@ export function HeroProductVideo({ className = "" }: { className?: string }) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let cancelled = false;
+    // Bump preload before anything else. Desktop Chrome over-fetches enough
+    // body under `metadata` alone that `canplay` still fires; mobile browsers
+    // honour `metadata` literally, so without this the body is never
+    // requested and the clip never reaches a playable state — this autoplay
+    // effect then waits forever.
+    warm();
+
     const run = () => {
       if (cancelled) return;
-      warm();
       setPhase("rebuild");
-      void video.play();
-      watchMidpoint();
+      video
+        .play()
+        .then(watchMidpoint)
+        // Autoplay refused (Low Power Mode, data saver, browser policy) —
+        // nothing actually moved, so undo the optimistic phase flip instead
+        // of leaving state and video out of sync for the next click.
+        .catch(() => {
+          if (!cancelled) setPhase("explode");
+        });
     };
 
-    // `canplay` if the source is already resolved by the time this effect
-    // fires; otherwise wait for the source-selection effect above to set
-    // `video.src`, since playing before that exists is a no-op.
-    if (video.currentSrc) {
+    // `loadedmetadata` fires once duration/dimensions are known, which
+    // happens even under `preload="metadata"` — unlike `canplay`, which needs
+    // enough of the body buffered, and mobile browsers may never reach that
+    // point without a `play()` call to kick off further loading.
+    if (video.readyState >= 1) {
       run();
     } else {
-      video.addEventListener("canplay", run, { once: true });
+      video.addEventListener("loadedmetadata", run, { once: true });
     }
 
     return () => {
       cancelled = true;
-      video.removeEventListener("canplay", run);
+      video.removeEventListener("loadedmetadata", run);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
