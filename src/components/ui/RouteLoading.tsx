@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/Container";
  * Route-level loading state. Mirrors the interior page rhythm so the shell
  * doesn't jump when content arrives.
  */
-export default function Loading() {
+export function RouteLoading() {
   return (
     <Container as="section" className="pb-32 pt-[184px]">
       <div className="p1-eyebrow mb-6 flex items-center gap-2.5">

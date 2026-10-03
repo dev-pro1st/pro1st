@@ -9,7 +9,7 @@ import { TrustBar } from "@/components/sections/TrustBar";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { getCraftPanels } from "@/lib/content/sections";
 
-/** Imagery comes from Shopify products; see the note on src/app/page.tsx. */
+/** Imagery comes from Shopify products; see the note on src/app/(main)/page.tsx. */
 export const revalidate = 300;
 
 export const metadata: Metadata = {

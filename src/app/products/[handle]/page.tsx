@@ -38,7 +38,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { handle } = await params;
   const product = await productRepository.getByHandle(handle);
-  if (!product) return { title: "Product not found" };
+  if (!product) notFound();
 
   // SEO copy is derived from product data, so it stays correct once the
   // Shopify catalogue replaces the mock records.
