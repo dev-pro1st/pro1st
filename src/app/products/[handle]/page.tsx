@@ -132,12 +132,15 @@ export default async function ProductPage({ params }: PageProps) {
       <Container as="nav" className="pt-[112px] lg:pt-[136px]">
         <ol className="p1-mono m-0 flex list-none flex-wrap gap-2 p-0 text-faint">
           <li>
-            <Link href="/products">Products</Link>
+            <Link href="/products" prefetch={false}>
+              Products
+            </Link>
           </li>
           <li aria-hidden="true">/</li>
           <li>
             <Link
               href={`/products?category=${product.categoryHandle ?? categorySlug(product.category)}`}
+              prefetch={false}
             >
               {product.category}
             </Link>

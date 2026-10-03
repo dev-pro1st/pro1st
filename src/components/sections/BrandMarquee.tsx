@@ -110,6 +110,7 @@ export function BrandMarquee({ brands = [] }: { brands?: CategorySummary[] }) {
               {slug ? (
                 <Link
                   href={`/products?category=${slug}`}
+                  prefetch={false}
                   tabIndex={isDuplicate ? -1 : 0}
                   className="transition-opacity hover:opacity-80"
                 >

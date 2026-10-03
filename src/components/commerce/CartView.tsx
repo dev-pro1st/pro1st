@@ -25,7 +25,7 @@ export function CartView() {
       <EmptyState
         message="Your cart is empty."
         action={
-          <Link href="/products" className="p1-btn p1-btn--primary">
+          <Link href="/products" prefetch={false} className="p1-btn p1-btn--primary">
             Browse the catalogue
           </Link>
         }

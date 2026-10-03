@@ -28,7 +28,7 @@ export default async function CheckoutSuccessPage({
       />
 
       <Container as="section" className="pb-24 lg:pb-32">
-        <Link href="/products" className="p1-btn p1-btn--primary">
+        <Link href="/products" prefetch={false} className="p1-btn p1-btn--primary">
           Continue shopping
         </Link>
       </Container>

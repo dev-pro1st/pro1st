@@ -113,7 +113,7 @@ export function GalleryBand({ shots }: { shots: GalleryShot[] }) {
           })}
         </div>
 
-        <Link href="/products" className="p1-link mt-12">
+        <Link href="/products" prefetch={false} className="p1-link mt-12">
           Open the full gallery →
         </Link>
       </div>

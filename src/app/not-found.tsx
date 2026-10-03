@@ -11,7 +11,7 @@ export default function NotFound() {
         line.
       </p>
       <div className="mt-10 flex flex-wrap gap-3">
-        <Link href="/products" className="p1-btn p1-btn--primary">
+        <Link href="/products" prefetch={false} className="p1-btn p1-btn--primary">
           Browse the catalogue
         </Link>
         <Link href="/contact" className="p1-btn p1-btn--outline">

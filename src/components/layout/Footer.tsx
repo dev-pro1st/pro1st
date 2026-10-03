@@ -3,6 +3,7 @@ import { footerColumns, contact, site } from "@/data/site";
 import { getPolicies } from "@/lib/shopify/policies";
 import { productRepository } from "@/lib/products";
 import { NewsletterForm } from "./NewsletterForm";
+import { prefetchFor } from "@/lib/prefetch";
 
 /**
  * Footer.
@@ -59,6 +60,7 @@ export async function Footer() {
                     <Link
                       key={`${column.head}-${link.label}`}
                       href={link.href}
+                      prefetch={prefetchFor(link.href)}
                       className="p1-tap-row flex items-center transition-colors duration-[160ms] ease-signal hover:text-signal"
                     >
                       {link.label}

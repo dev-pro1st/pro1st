@@ -56,6 +56,7 @@ export function CategoryMarquee({ items }: { items: MarqueeItem[] }) {
           <Link
             key={`${item.label}-${index}`}
             href={`/products?category=${item.slug}`}
+            prefetch={false}
             aria-hidden={index >= items.length}
             tabIndex={index >= items.length ? -1 : undefined}
             className="inline-flex items-center gap-5 px-3.5 font-display text-xl font-medium tracking-[-0.01em] text-body transition-colors duration-[120ms] ease-signal hover:text-signal"

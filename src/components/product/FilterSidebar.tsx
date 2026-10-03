@@ -18,10 +18,14 @@ interface FilterSidebarProps {
 /**
  * Faceted sidebar.
  *
- * Every control is a link, so each filter combination is a real, shareable,
- * indexable URL and the page needs no JavaScript to filter. Facet groups are
- * derived from the catalogue at request time — this component does not know
- * what a "Power Output" is, it renders whatever labels the products carry.
+ * Every control is a link, so each filter combination is a real, shareable
+ * URL and the page needs no JavaScript to filter. Only the category URLs are
+ * offered to crawlers: the toggles combine freely, so following them is an
+ * effectively unbounded crawl of uncacheable server renders (see FilterLink).
+ *
+ * Facet groups are derived from the catalogue at request time — this
+ * component does not know what a "Power Output" is, it renders whatever
+ * labels the products carry.
  *
  * Until specification metafields exist in Shopify, this correctly shows
  * category, availability and price only, then grows on its own.
@@ -234,9 +238,17 @@ function FilterLink({
   active: boolean;
   children: React.ReactNode;
 }) {
+  // Category pages are indexable and listed in the sitemap. Any other
+  // parameter is a facet toggle, and every toggle preserves the rest of the
+  // query — 20 tags alone are 2^20 distinct URLs per category, each a dynamic
+  // render. robots.txt disallows those; nofollow stops them being discovered.
+  // Prefetch is off for all of them: see src/lib/prefetch.ts.
+  const crawlable = href === "/products" || /^\/products\?category=[^&]*$/.test(href);
   return (
     <Link
       href={href}
+      prefetch={false}
+      rel={crawlable ? undefined : "nofollow"}
       aria-pressed={active}
       className={`p1-tap-row flex items-center gap-3 text-[13px] leading-snug transition-colors duration-[160ms] ease-signal ${
         active ? "text-strong" : "text-body hover:text-strong"

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { prefetchFor } from "@/lib/prefetch";
 
 /**
  * Navigation pill.
@@ -76,6 +77,7 @@ export function PillBase({
           <Link
             key={item.href}
             href={item.href}
+            prefetch={prefetchFor(item.href)}
             aria-current={isActive ? "page" : undefined}
             className={`pill-label relative whitespace-nowrap rounded-full px-5 py-2 ${
               isActive ? "pill-label--active" : ""

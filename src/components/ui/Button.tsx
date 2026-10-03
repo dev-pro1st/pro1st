@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { prefetchFor } from "@/lib/prefetch";
 
 export type ButtonVariant = "primary" | "outline" | "dark" | "ash";
 
@@ -70,7 +71,12 @@ export function ButtonLink({
   }
 
   return (
-    <Link href={href} className={classes} aria-label={ariaLabel}>
+    <Link
+      href={href}
+      prefetch={prefetchFor(href)}
+      className={classes}
+      aria-label={ariaLabel}
+    >
       {children}
     </Link>
   );

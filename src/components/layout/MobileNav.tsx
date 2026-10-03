@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { contact, primaryNav } from "@/data/site";
 import { useFocusTrap } from "@/lib/a11y/useFocusTrap";
 import type { CategorySummary } from "@/types/product";
+import { prefetchFor } from "@/lib/prefetch";
 
 interface MobileNavProps {
   open: boolean;
@@ -54,6 +55,7 @@ export function MobileNav({ open, onClose, categories }: MobileNavProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={prefetchFor(item.href)}
                 onClick={onClose}
                 aria-current={isCurrent ? "page" : undefined}
                 className={`border-b border-hairline py-5 font-display text-2xl font-medium tracking-[-0.02em] ${
@@ -75,6 +77,7 @@ export function MobileNav({ open, onClose, categories }: MobileNavProps) {
             <Link
               key={category.slug}
               href={`/products?category=${category.slug}`}
+              prefetch={false}
               onClick={onClose}
               className="flex items-baseline justify-between gap-2 border-b border-hairline pb-2 text-sm text-body"
             >

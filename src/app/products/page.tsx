@@ -129,6 +129,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
               {filtered ? (
                 <Link
                   href={active ? `/products?category=${active}` : "/products"}
+                  prefetch={false}
                   className="p1-mono text-soft hover:text-signal"
                 >
                   Clear filters ✕

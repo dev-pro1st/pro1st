@@ -39,6 +39,7 @@ export function CategoryGrid({
             <Link
               key={category.slug}
               href={`/products?category=${category.slug}`}
+              prefetch={false}
               className="group flex flex-col"
             >
               <div className="relative mb-6 aspect-square overflow-hidden border border-hairline bg-panel shadow-[var(--shadow-card)]">

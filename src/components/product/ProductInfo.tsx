@@ -42,6 +42,7 @@ export function ProductInfo({ product }: { product: Product }) {
         {product.category ? (
           <Link
             href={categoryHref}
+            prefetch={false}
             className="text-soft hover:text-signal"
           >
             {product.category}

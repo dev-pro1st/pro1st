@@ -35,7 +35,7 @@ export function ArsenalSection({
 
       <ProductGrid products={products} tilt={tilt} priorityCount={4} />
 
-      <Link href="/products" className="p1-link mt-12">
+      <Link href="/products" prefetch={false} className="p1-link mt-12">
         View all {totalCount} products →
       </Link>
     </Container>
