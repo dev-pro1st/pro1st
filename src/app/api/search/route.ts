@@ -66,9 +66,15 @@ export async function GET(request: NextRequest) {
     };
   });
 
-  return NextResponse.json<SearchResponse>({
-    query,
-    total: results.length,
-    hits,
-  });
+  // Same window as the catalogue's own revalidation: a repeated query is
+  // answered by the CDN instead of running a function. Error and empty-query
+  // responses above stay uncached.
+  return NextResponse.json<SearchResponse>(
+    { query, total: results.length, hits },
+    {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+      },
+    },
+  );
 }
