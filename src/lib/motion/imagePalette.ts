@@ -1,5 +1,7 @@
 "use client";
 
+import imageLoader from "@/lib/image-loader";
+
 /**
  * Spatial colour sampling: what colour is the image, and *where*.
  *
@@ -12,9 +14,10 @@
  * resampler does the averaging, so an N×N sample costs one draw call and N²
  * pixel reads regardless of the source resolution.
  *
- * The source goes through `/_next/image`, which is same-origin, so the canvas
- * is never tainted and `getImageData` is legal. Reading straight from
- * cdn.shopify.com would throw a SecurityError.
+ * The image is fetched in CORS mode (`crossOrigin = "anonymous"`). Shopify's
+ * CDN answers with `access-control-allow-origin: *`, so the canvas stays
+ * clean and `getImageData` is legal; a host that does not send it fails the
+ * load, which resolves to `null` and simply shows no wash.
  *
  * Nothing here is per-product or per-palette: every colour and every position
  * is measured off whatever image it is handed.
@@ -33,9 +36,9 @@ export interface PaletteCell {
 
 const cache = new Map<string, Promise<PaletteCell[] | null>>();
 
-/** Same transform `next/image` applies, so we hit its cache, not Shopify's. */
+/** The same resizing `next/image` applies, minus the same-origin hop. */
 function optimized(src: string, width = 128): string {
-  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`;
+  return imageLoader({ src, width });
 }
 
 export function imagePalette(
@@ -49,6 +52,7 @@ export function imagePalette(
   const promise = new Promise<PaletteCell[] | null>((resolve) => {
     const image = new Image();
     image.decoding = "async";
+    image.crossOrigin = "anonymous";
 
     image.onload = () => {
       try {

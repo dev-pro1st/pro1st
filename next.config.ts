@@ -6,20 +6,16 @@ import type { NextConfig } from "next";
  * the demo host below.
  */
 const nextConfig: NextConfig = {
+  /**
+   * Images skip `/_next/image` entirely: Shopify resizes its own, and local
+   * files are stored at display size. See src/lib/image-loader.ts for why —
+   * on a Worker every `/_next/image` hit is a billed invocation. With a
+   * custom loader there is no `remotePatterns` allowlist to keep, and the
+   * built-in endpoint rejects every remote URL.
+   */
   images: {
-    /**
-     * Next's default is 60s: after a minute every optimised image is treated
-     * as stale and revalidated against its origin, which is one more request
-     * and one more cache write per image per minute of traffic. Catalogue
-     * imagery changes on the scale of days, not minutes; a changed Shopify
-     * image gets a new URL, so a long TTL never serves a wrong picture.
-     */
-    minimumCacheTTL: 60 * 60 * 24 * 30,
-    remotePatterns: [
-      { protocol: "https", hostname: "pro1st-demo.netlify.app" },
-      { protocol: "https", hostname: "pro1st.in" },
-      { protocol: "https", hostname: "cdn.shopify.com" },
-    ],
+    loader: "custom",
+    loaderFile: "./src/lib/image-loader.ts",
   },
   /**
    * This app replaced Shopify's own Liquid storefront at the same domain.
