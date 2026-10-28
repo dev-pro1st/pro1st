@@ -9,7 +9,7 @@ The storefront runs on Cloudflare Workers through the OpenNext adapter
 | Need | Cloudflare piece | Binding |
 | --- | --- | --- |
 | Static files, `/_next/static` | Workers Assets (free, no Worker invocation) | `ASSETS` |
-| ISR pages (`revalidate = 300`) | KV namespace (no card needed) | `NEXT_INC_CACHE_KV` |
+| ISR pages (`revalidate = 300`) | R2 bucket | `NEXT_INC_CACHE_R2_BUCKET` |
 | Time-based revalidation | Durable Object queue | `NEXT_CACHE_DO_QUEUE` |
 | `revalidatePath` from the Shopify webhook | D1 tag cache | `NEXT_TAG_CACHE_D1` |
 | Self calls (revalidation) | service binding | `WORKER_SELF_REFERENCE` |
@@ -19,14 +19,11 @@ images at Shopify's own resizing CDN and serves local files as static assets.
 
 ## One-time setup (in the account that will own the store)
 
-1. `npx wrangler login` (no card needed: Workers, KV, D1 and Durable Objects
-   all have free tiers that do not ask for one).
-2. `npx wrangler kv namespace create pro1st-next-cache`, then put the returned
-   `id` in `wrangler.jsonc` (replace `REPLACE_WITH_KV_NAMESPACE_ID`).
-3. `npx wrangler d1 create pro1st-tag-cache`, then put the returned
+1. Enable R2 in the dashboard (R2 → Overview).
+2. `npx wrangler login`
+3. `npx wrangler r2 bucket create pro1st-next-cache`
+4. `npx wrangler d1 create pro1st-tag-cache`, then put the returned
    `database_id` in `wrangler.jsonc` (replace `REPLACE_WITH_D1_DATABASE_ID`).
-4. Apply the tag-cache schema once the D1 exists (see the adapter docs for
-   the `revalidations` table).
 5. Secrets, one per line (`npx wrangler secret put NAME`). Names only:
    `SHOPIFY_STORE_DOMAIN`, `SHOPIFY_STOREFRONT_PUBLIC_TOKEN`,
    `SHOPIFY_STOREFRONT_PRIVATE_TOKEN`, `SHOPIFY_API_VERSION`,
