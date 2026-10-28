@@ -9,8 +9,8 @@
     "binding": "ASSETS"
   },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "pro1st" }],
-  "r2_buckets": [
-    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "pro1st-next-cache" }
+  "kv_namespaces": [
+    { "binding": "NEXT_INC_CACHE_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
   ],
   "durable_objects": {
     "bindings": [{ "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" }]
