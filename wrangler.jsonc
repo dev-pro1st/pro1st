@@ -20,7 +20,7 @@
     {
       "binding": "NEXT_TAG_CACHE_D1",
       "database_name": "pro1st-tag-cache",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+      "database_id": "ce8b7292-c7d5-40b9-92cf-f1cdc7079215"
     }
   ],
   "observability": { "enabled": true }
