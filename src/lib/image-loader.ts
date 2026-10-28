@@ -36,9 +36,15 @@ export default function imageLoader({ src, width }: LoaderArgs): string {
 
   // A local path is emitted into `srcset`, where whitespace separates
   // candidates — "/Pro1ST Brand Carousel/…" has to be encoded to survive it.
-  // Decode first so an already-encoded name ("A%20Plus.png") is not doubled.
+  // Decode each segment first so an already-encoded name ("A%20Plus.png") is
+  // not doubled. Per segment, with the Component variants, because `&` in a
+  // file name ("G&S.png") must become %26 — `encodeURI` leaves `&` alone and
+  // re-encodes an existing %26 into %2526, which is a 404.
   try {
-    return encodeURI(decodeURI(src));
+    return src
+      .split("/")
+      .map((segment) => encodeURIComponent(decodeURIComponent(segment)))
+      .join("/");
   } catch {
     return src;
   }
