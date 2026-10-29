@@ -176,12 +176,15 @@ export async function getShippingQuote(
 
   return Promise.all(
     addresses.map(async (address): Promise<ShippingQuoteResult> => {
+      // Razorpay sends codes lowercase ("in", "dl"); Shopify's CountryCode
+      // enum and province codes only accept uppercase, and rejects the whole
+      // mutation otherwise.
       const input: DeliveryAddressInput = {
         address1: address.address1,
         city: address.city,
-        province: address.state,
+        province: address.state?.trim().toUpperCase(),
         zip: address.zipcode,
-        country: address.country,
+        country: address.country.trim().toUpperCase(),
       };
 
       try {
@@ -195,10 +198,13 @@ export async function getShippingQuote(
             shippingFeePaise: Math.round(option.amount * 100),
           })),
         };
-      } catch {
+      } catch (error) {
         // A cart that no longer exists, or an address Shopify's shipping
         // profiles don't cover — either way, not serviceable, not an error
-        // the buyer should see as a broken checkout.
+        // the buyer should see as a broken checkout. Logged, though: a silent
+        // catch here once turned a runtime failure into "we do not deliver to
+        // this location" with nothing to find in the logs.
+        console.error("[pro1st] shipping quote failed.", error);
         return { id: address.id, shippingMethods: [] };
       }
     }),
