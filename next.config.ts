@@ -50,6 +50,15 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // One host per page. www.pro1st.in answered 200 with the same content as
+      // pro1st.in, so every URL existed twice for search engines. The pages
+      // already declare the bare domain canonical; this makes it a redirect.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.pro1st.in" }],
+        destination: "https://pro1st.in/:path*",
+        permanent: true,
+      },
       {
         source: "/collections/:handle",
         destination: "/products?category=:handle",
