@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/hero/Hero";
 import { ArsenalSection } from "@/components/sections/ArsenalSection";
 import { BrandMarquee } from "@/components/sections/BrandMarquee";
@@ -19,6 +20,14 @@ import { getFeaturedProducts, productRepository } from "@/lib/products";
  * the same window the catalogue routes already use.
  */
 export const revalidate = 300;
+
+/**
+ * The only page without a declared canonical. With nothing stated, search
+ * engines pick the host themselves, and after the move they listed `www`.
+ */
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 /**
  * Homepage.

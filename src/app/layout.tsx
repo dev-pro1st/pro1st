@@ -82,10 +82,18 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: site.name,
   url: site.url,
-  logo: `${site.url}/opengraph-image`,
+  // Square, not the wide social card: search logos need a square mark.
+  logo: `${site.url}/icon.png`,
   description: site.description,
   telephone: contact.phone,
   email: contact.email,
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    telephone: contact.phone,
+    email: contact.email,
+    areaServed: "IN",
+  },
   address: {
     "@type": "PostalAddress",
     streetAddress: contact.addressLines.join(", "),
